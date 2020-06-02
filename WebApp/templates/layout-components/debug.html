@@ -1,0 +1,9 @@
+<p>{{request.endpoint}}</p>
+<p>{{request}}</p>
+<p>{{session['cart']}}</p>
+<p>{{session}}</p>
+<p>
+    {% if form and form.errors %}
+    {{ form.errors}}
+    {% endif %}
+</p>
