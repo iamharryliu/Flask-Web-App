@@ -24,7 +24,7 @@ from WebApp.store.cart.utils import (
 
 
 cart_blueprint = Blueprint(
-    "cart_blueprint", __name__, url_prefix="/store/cart", template_folder="templates"
+    "cart_blueprint", __name__, url_prefix="/cart", template_folder="templates"
 )
 
 

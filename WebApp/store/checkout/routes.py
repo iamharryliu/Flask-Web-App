@@ -5,10 +5,7 @@ from WebApp.store.cart.utils import get_user_cart, get_user_cart_and_items
 from WebApp.store.checkout.utils import process_order
 
 checkout_blueprint = Blueprint(
-    "checkout_blueprint",
-    __name__,
-    url_prefix="/store/checkout",
-    template_folder="templates",
+    "checkout_blueprint", __name__, url_prefix="/checkout", template_folder="templates"
 )
 
 
