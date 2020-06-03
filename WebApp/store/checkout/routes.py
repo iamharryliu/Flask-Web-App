@@ -9,27 +9,9 @@ from flask import (
     abort,
 )
 from flask_login import login_required, current_user
-from WebApp.store.cart.utils import update_cart_values
-from WebApp.store.checkout.forms import AddressForm, CreditCardForm, CheckoutForm
+from WebApp.store.checkout.forms import CheckoutForm
 from WebApp.store.cart.utils import get_user_cart, get_user_cart_and_items
-from WebApp.store.checkout.utils import (
-    add_address,
-    get_user_addresses,
-    get_address,
-    edit_address,
-    set_default_address,
-    update_address_form,
-    delete_address,
-    add_card,
-    get_cards,
-    get_card,
-    get_filled_card_form,
-    edit_card,
-    set_default_card,
-    delete_card,
-    process_order,
-)
-from datetime import datetime
+from WebApp.store.checkout.utils import process_order
 
 checkout_blueprint = Blueprint(
     "checkout_blueprint",
