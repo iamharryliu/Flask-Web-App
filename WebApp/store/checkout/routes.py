@@ -1,13 +1,4 @@
-from flask import (
-    Blueprint,
-    render_template,
-    url_for,
-    redirect,
-    request,
-    session,
-    flash,
-    abort,
-)
+from flask import Blueprint, render_template, url_for, redirect, session, flash
 from flask_login import login_required, current_user
 from WebApp.store.checkout.forms import CheckoutForm
 from WebApp.store.cart.utils import get_user_cart, get_user_cart_and_items
