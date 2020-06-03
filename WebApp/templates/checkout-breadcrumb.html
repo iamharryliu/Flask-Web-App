@@ -11,7 +11,7 @@
 		<li class="breadcrumb-item active">Shipping Address</li>
 		{% elif session['cart'] %}
 		<li class="breadcrumb-item"><a
-				href='{{ url_for("checkout_blueprint.address", subpath="shipping_address") }}'>Shipping Address</a></li>
+				href='{{ url_for("checkout_blueprint.checkout", subpath="shipping_address") }}'>Shipping Address</a></li>
 		{% endif %}
 
 		{% if title == 'Shipping Option' %}
@@ -25,7 +25,7 @@
 		<li class="breadcrumb-item active">Billing Address</li>
 		{% elif session['shipping_option'] %}
 		<li class="breadcrumb-item"><a
-				href='{{ url_for("checkout_blueprint.address", subpath="billing_address") }}'>Billing Address</a></li>
+				href='{{ url_for("checkout_blueprint.checkout", subpath="billing_address") }}'>Billing Address</a></li>
 		{% endif %}
 
 		{% if title == 'Payment' %}

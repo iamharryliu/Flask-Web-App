@@ -135,7 +135,7 @@ def submit_cart():
     else:
         cart_items = session["cart"]["cart_items"]
     if cart_items:
-        return redirect(url_for("checkout_blueprint.address"))
+        return redirect(url_for("checkout_blueprint.checkout"))
     else:
         flash("Add items to cart to checkout.", "danger")
         return redirect(url_for("cart_blueprint.cart"))

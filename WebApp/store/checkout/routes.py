@@ -40,13 +40,37 @@ checkout_blueprint = Blueprint(
 
 
 @checkout_blueprint.route("", methods=["GET", "POST"])
-def address():
-    # update_cart_values()
+def checkout():
     form = CheckoutForm()
-    # cart = get_user_cart()
     if form.validate_on_submit():
-        flash("successful", "success")
-        return redirect(url_for("checkout_blueprint.address"))
+        flash("success", "success")
+        email = form.email.data
+        newsletter_sub = form.newsletter_sub.data
+        shipping_first_name = form.shipping_first_name.data
+        shipping_last_name = form.shipping_last_name.data
+        shipping_address = form.shipping_address.data
+        shipping_address_unit = form.shipping_address_unit.data
+        shipping_city = form.shipping_city.data
+        shipping_region = form.shipping_region.data
+        shipping_postal_code = form.shipping_postal_code.data
+        shipping_country = form.shipping_country.data
+        shipping_phone_number = form.shipping_phone_number.data
+        shipping_method = form.shipping_method.data
+        card_number = form.card_number.data
+        card_name = form.card_name.data
+        card_expiration_month = form.card_expiration_month.data
+        card_expiration_year = form.card_expiration_year.data
+        same_as_shipping = form.same_as_shipping.data
+        billing_first_name = form.billing_first_name.data
+        billing_last_name = form.billing_last_name.data
+        billing_address = form.billing_address.data
+        billing_address_unit = form.billing_address_unit.data
+        billing_city = form.billing_city.data
+        billing_region = form.billing_region.data
+        billing_postal_code = form.billing_postal_code.data
+        billing_country = form.billing_country.data
+        billing_phone_number = form.billing_phone_number.data
+        return redirect(url_for("checkout_blueprint.checkout"))
     return render_template("checkout.html", title="Checkout", form=form)
 
 
@@ -58,7 +82,7 @@ def add_address_route(subpath):
     form = AddressForm()
     if form.validate_on_submit():
         add_address()
-        return redirect(url_for("checkout_blueprint.address", subpath=subpath))
+        return redirect(url_for("checkout_blueprint.checkout", subpath=subpath))
     cart = get_user_cart()
     return render_template(
         "checkout/address/components/add-edit-address/view.html",
@@ -79,7 +103,7 @@ def edit_address_route(subpath, address_id):
     form = AddressForm()
     if form.validate_on_submit():
         edit_address(address)
-        return redirect(url_for("checkout_blueprint.address", subpath=subpath))
+        return redirect(url_for("checkout_blueprint.checkout", subpath=subpath))
     form = update_address_form(address)
     cart = get_user_cart()
     return render_template(
@@ -95,14 +119,14 @@ def edit_address_route(subpath, address_id):
 @login_required
 def set_default_address_route(subpath, address_id):
     set_default_address(address_id)
-    return redirect(url_for("checkout_blueprint.address", subpath=subpath))
+    return redirect(url_for("checkout_blueprint.checkout", subpath=subpath))
 
 
 @checkout_blueprint.route("/<path:subpath>/delete/<int:address_id>/", methods=["POST"])
 @login_required
 def checkout_address_delete(subpath, address_id):
     delete_address(address_id)
-    return redirect(url_for("checkout_blueprint.address", subpath=subpath))
+    return redirect(url_for("checkout_blueprint.checkout", subpath=subpath))
 
 
 @checkout_blueprint.route("/<path:subpath>/submit", methods=["POST"])
@@ -115,7 +139,7 @@ def submit_address(subpath):
         return route
     else:
         flash("Please select an address. If no addresses exist add them.", "danger")
-        return redirect(url_for("checkout_blueprint.address", subpath=subpath))
+        return redirect(url_for("checkout_blueprint.checkout", subpath=subpath))
 
 
 def get_submit_address_route(subpath):
@@ -148,7 +172,7 @@ def submit_shipping_option():
     if shipping_option:
         session["shipping_option"] = shipping_option
         return redirect(
-            url_for("checkout_blueprint.address", subpath="billing_address")
+            url_for("checkout_blueprint.checkout", subpath="billing_address")
         )
     return redirect(url_for("checkout_blueprint.shipping_option"))
 
