@@ -10,9 +10,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, ValidationError
 from datetime import date
-
-
-default_option = [("--", "--")]
+import calendar
 
 provinces = [
     ("--", "--"),
@@ -32,35 +30,6 @@ provinces = [
 ]
 
 countries = [("--", "--"), ("Canada", "CA")]
-
-expiration_months = [
-    ("--", "--"),
-    ("01", "01"),
-    ("02", "02"),
-    ("03", "03"),
-    ("04", "04"),
-    ("05", "05"),
-    ("06", "06"),
-    ("07", "07"),
-    ("08", "08"),
-    ("09", "09"),
-    ("10", "10"),
-    ("11", "11"),
-    ("12", "12"),
-]
-
-from datetime import datetime
-import calendar
-
-expiration_years = default_option
-min_year = datetime.now().year
-max_year = min_year + 20
-for year in range(min_year, max_year + 1):
-    year = str(year)
-    choice = (year, year)
-    expiration_years.append(choice)
-
-today = date.today()
 
 
 class CheckoutForm(FlaskForm):
@@ -117,10 +86,6 @@ class CheckoutForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-class AddressForm(FlaskForm):
-    pass
-
-
 class CreditCardForm(FlaskForm):
     def validate_on_submit(self):
         if request.method == "POST":
@@ -128,7 +93,8 @@ class CreditCardForm(FlaskForm):
             expiration_year = int(self.expiration_year.data)
             expiration_day = calendar.monthrange(expiration_year, expiration_month)[1]
             expiration_date = date(expiration_year, expiration_month, expiration_day)
-            result = super(CreditCardForm, self).validate()
+            # result = super(CreditCardForm, self).validate()
+            today = date.today()
             if expiration_date > today:
                 return result
             else:

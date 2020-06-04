@@ -20,12 +20,6 @@ class User(db.Model, UserMixin):
     subscription_status = db.Column(db.Boolean, default=True)
     posts = db.relationship("Post", backref="author", cascade="all,delete", lazy=True)
     carts = db.relationship("Cart", backref="customer", cascade="all,delete", lazy=True)
-    checkout_addresses = db.relationship(
-        "CheckoutAddress", backref="customer", cascade="all,delete", lazy=True
-    )
-    credit_cards = db.relationship(
-        "CreditCard", backref="owner", cascade="all,delete", lazy=True
-    )
 
     def get_confirm_email_token(self):
         s = Serializer(current_app.config["SECRET_KEY"])
@@ -101,31 +95,34 @@ class CartItem(db.Model):
     size = db.Column(db.Text, nullable=False)
 
 
-class CheckoutAddress(db.Model):
+class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    # user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
     email = db.Column(db.String(120), nullable=False)
-    phone = db.Column(db.String(120), nullable=False)
-    first_name = db.Column(db.String(20))
-    last_name = db.Column(db.String(20), nullable=False)
-    address = db.Column(db.String(20), nullable=False)
-    apartment = db.Column(db.String(20))
-    city = db.Column(db.String(20), nullable=False)
-    province = db.Column(db.String(20), nullable=False)
-    postal_code = db.Column(db.String(20), nullable=False)
-    country = db.Column(db.String(20), nullable=False)
-    default = db.Column(db.Boolean, default=False)
 
-    def __repr__(self):
-        return f"{self.address}, {self.city}, {self.province}, {self.postal_code}, {self.country}"
+    shipping_first_name = db.Column(db.String(20))
+    shipping_last_name = db.Column(db.String(20), nullable=False)
+    shipping_address = db.Column(db.String(20), nullable=False)
+    shipping_address_unit = db.Column(db.String(20))
+    shipping_city = db.Column(db.String(20), nullable=False)
+    shipping_region = db.Column(db.String(20), nullable=False)
+    shipping_country = db.Column(db.String(20), nullable=False)
+    shipping_postal_code = db.Column(db.String(20), nullable=False)
+    shipping_phone_number = db.Column(db.String(20), nullable=False)
+    shipping_method = db.Column(db.String(20))
 
+    card_number = db.Column(db.String(20), nullable=False)
+    card_name = db.Column(db.String(40), nullable=False)
+    card_expiration_month = db.Column(db.String(2), nullable=False)
+    card_expiration_year = db.Column(db.String(2), nullable=False)
 
-class CreditCard(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    number = db.Column(db.String(19), nullable=False)
-    name = db.Column(db.String(40), nullable=False)
-    expiration_date = db.Column(db.DateTime, nullable=False)
-    expiration_month = db.Column(db.String(2), nullable=False)
-    expiration_year = db.Column(db.String(4), nullable=False)
-    default = db.Column(db.Boolean, default=False)
+    billing_first_name = db.Column(db.String(20))
+    billing_last_name = db.Column(db.String(20), nullable=False)
+    billing_address = db.Column(db.String(20), nullable=False)
+    billing_address_unit = db.Column(db.String(20))
+    billing_city = db.Column(db.String(20), nullable=False)
+    billing_region = db.Column(db.String(20), nullable=False)
+    billing_country = db.Column(db.String(20), nullable=False)
+    billing_postal_code = db.Column(db.String(20), nullable=False)
+    billing_phone_number = db.Column(db.String(120), nullable=False)
