@@ -56,7 +56,7 @@ Hello {user.username}!
 You have registered for an account on iamharryliu.com.
 
 To confirm your account, visit the following link:
-{url_for('users_blueprint.confirm_email_token', token=token, _external=True)}
+{url_for('users.confirm_email_token', token=token, _external=True)}
 If you did not make this request then simply ignore this email.
 
 Cheers,
@@ -78,7 +78,7 @@ def send_reset_email(user):
     msg = Message("Password Reset Request", recipients=[user.email])
     msg.body = f"""\
 To reset your password, visit the following link:
-{url_for('users_blueprint.reset_password_token', token=token, _external=True)}
+{url_for('users.reset_password_token', token=token, _external=True)}
 If you did not make this request then simply ignore this email.
     """
     mail.send(msg)
@@ -125,7 +125,7 @@ def handle_login():
         return redirect(next_page) if next_page else redirect(url_for("main.home"))
     else:
         flash("Login unsuccessful. Please check email and password.", "danger")
-        return redirect(url_for("users_blueprint.login"))
+        return redirect(url_for("users.login"))
 
 
 def save_picture(form_picture):

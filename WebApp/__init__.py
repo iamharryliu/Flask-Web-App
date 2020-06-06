@@ -42,10 +42,10 @@ def create_app(config_class=Config):
     from WebApp.main.routes import main_blueprint
     from WebApp.users.routes import users_blueprint
     from WebApp.posts.routes import posts_blueprint
-    from WebApp.errors.handlers import errors
     from WebApp.store.products.routes import products_blueprint
     from WebApp.store.cart.routes import cart_blueprint
     from WebApp.store.checkout.routes import checkout_blueprint
+    from WebApp.errors.handlers import errors
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(users_blueprint)
