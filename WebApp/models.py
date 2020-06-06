@@ -2,7 +2,7 @@ from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from WebApp import db, login_manager
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 
 
 @login_manager.user_loader
@@ -20,6 +20,9 @@ class User(db.Model, UserMixin):
     subscription_status = db.Column(db.Boolean, default=True)
     posts = db.relationship("Post", backref="author", cascade="all,delete", lazy=True)
     carts = db.relationship("Cart", backref="customer", cascade="all,delete", lazy=True)
+    orders = db.relationship(
+        "Order", backref="customer", cascade="all,delete", lazy=True
+    )
 
     def get_confirm_email_token(self):
         s = Serializer(current_app.config["SECRET_KEY"])
@@ -48,7 +51,22 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.subscription_status}')"
+        return f"{self.username}"
+
+
+# class Anonymous_user(db.Model, AnonymousUserMixin):
+#     id = db.Column(db.Integer, primary_key=True)
+#     orders = db.relationship(
+#         "Order", backref="", cascade="all,delete", lazy=True
+#     )
+# username = db.Column(db.String(20), unique=True, nullable=False)
+# email = db.Column(db.String(120), unique=True, nullable=False)
+# image_file = db.Column(db.String(20), nullable=False, default="default.jpg")
+# password = db.Column(db.String(60), nullable=False)
+# confirmed_email = db.Column(db.Boolean, default=False)
+# subscription_status = db.Column(db.Boolean, default=True)
+# posts = db.relationship("Post", backref="author", cascade="all,delete", lazy=True)
+# carts = db.relationship("Cart", backref="customer", cascade="all,delete", lazy=True)
 
 
 class Post(db.Model):
@@ -56,7 +74,7 @@ class Post(db.Model):
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
@@ -71,7 +89,7 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False, default="")
     image_file = db.Column(db.String(20), nullable=False)
     created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    cart_item = db.relationship("CartItem", backref="product", lazy=True)
+    cart_item = db.relationship("Item", backref="product", lazy=True)
 
     def __repr__(self):
         return f"Product Item('{self.name}', '{self.price}')"
@@ -80,14 +98,11 @@ class Product(db.Model):
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    cart_items = db.relationship(
-        "CartItem", backref="cart", cascade="all,delete", lazy=True
-    )
-    # quantity = db.Column(db.Integer, default=0)
-    # total = db.Column(db.Float, default=0)
+    items = db.relationship("Item", backref="cart", cascade="all,delete", lazy=True)
+    order = db.Column(db.Integer, db.ForeignKey("order.id"), unique=True)
 
 
-class CartItem(db.Model):
+class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cart_id = db.Column(db.Integer, db.ForeignKey("cart.id"), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey("product.id"), nullable=False)
@@ -97,7 +112,8 @@ class CartItem(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    # user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey("user.id"))
+    checkout_cart = db.relationship("Cart", backref="processed_order", uselist=False)
 
     email = db.Column(db.String(120), nullable=False)
 
@@ -110,7 +126,7 @@ class Order(db.Model):
     shipping_country = db.Column(db.String(20), nullable=False)
     shipping_postal_code = db.Column(db.String(20), nullable=False)
     shipping_phone_number = db.Column(db.String(20), nullable=False)
-    shipping_method = db.Column(db.String(20))
+    shipping_method = db.Column(db.String(20), nullable=False)
 
     card_number = db.Column(db.String(20), nullable=False)
     card_name = db.Column(db.String(40), nullable=False)

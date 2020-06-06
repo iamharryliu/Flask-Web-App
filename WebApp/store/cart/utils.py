@@ -1,7 +1,7 @@
 from flask import session, request
 from flask_login import current_user
 from WebApp import db
-from WebApp.models import Cart, CartItem
+from WebApp.models import Cart, Item
 from WebApp.store.products.forms import ItemForm
 
 
@@ -20,9 +20,9 @@ def add_item_to_cart(product):
 
 def add_item_to_user_cart(product):
     form = ItemForm()
-    cart = get_user_cart()
+    cart = current_user.carts[0]
     cart_item = (
-        CartItem.query.filter_by(cart_id=cart.id)
+        Item.query.filter_by(cart_id=cart.id)
         .filter_by(product_id=product.id)
         .filter_by(size=form.size.data)
         .first()
@@ -30,7 +30,7 @@ def add_item_to_user_cart(product):
     if cart_item:
         cart_item.quantity = form.quantity.data
     else:
-        cart_item = CartItem(
+        cart_item = Item(
             cart_id=cart.id,
             product_id=product.id,
             quantity=form.quantity.data,
@@ -66,37 +66,25 @@ def add_item_to_anonymous_cart(product):
 # Read
 
 
-def get_user_cart():
-    cart = (
-        Cart.query.filter_by(customer=current_user)
-        .order_by(Cart.id.desc())
-        .first_or_404()
-    )
-    return cart
+def get_cart_items_query():
+    cart = current_user.carts[0]
+    return Item.query.filter_by(cart_id=cart.id)
 
 
-def get_cart_items(cart):
-    items = CartItem.query.filter_by(cart_id=cart.id)
-    return items
-
-
-def get_user_cart_and_items():
-    cart = get_user_cart()
-    items = get_cart_items(cart).order_by(CartItem.id.desc()).all()
-    return cart, items
+def get_list_of_cart_items():
+    items = get_cart_items_query()
+    return items.order_by(Item.id.desc()).all()
 
 
 def get_cart_item(id):
-    item = CartItem.query.filter_by(id=id).first_or_404()
-    return item
+    return Item.query.filter_by(id=id).first_or_404()
 
 
 # Update
 
 
 def update_cart_items():
-    cart = get_user_cart()
-    items = get_cart_items(cart).order_by(CartItem.id.desc()).all()
+    items = get_cart_items_query().order_by(Item.id.desc()).all()
     ids = request.form.keys()
     for _id in ids:
         for item in items:
@@ -113,10 +101,10 @@ def update_cart_item(item):
 
 
 def update_cart_values():
-    cart, cart_items = get_user_cart_and_items()
+    items = get_list_of_cart_items()
     cart.total = 0
     cart.quantity = 0
-    for item in cart_items:
+    for item in items:
         cart.total += item.product.price * float(item.quantity)
         cart.quantity += item.quantity
     db.session.commit()
@@ -127,12 +115,10 @@ def update_cart_values():
 
 def delete_cart_item(cart_item):
     db.session.delete(cart_item)
-    cart = get_user_cart()
     db.session.commit()
 
 
 def delete_all_cart_items():
-    cart = get_user_cart()
-    cartItems = get_cart_items(cart=cart)
-    cartItems.delete()
+    cart_items = get_cart_items_query()
+    cart_items.delete()
     db.session.commit()

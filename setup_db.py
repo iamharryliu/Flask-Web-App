@@ -15,8 +15,6 @@ def main():
     db.create_all()
     create_superuser()
     create_products()
-    # create_mock_users()
-    # create_mock_posts()
 
 
 def create_superuser():

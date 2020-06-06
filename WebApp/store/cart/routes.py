@@ -12,9 +12,7 @@ from flask_login import login_required, current_user
 from WebApp.store.products.forms import ItemForm
 from WebApp.models import Cart
 from WebApp.store.cart.utils import (
-    get_user_cart,
-    get_cart_items,
-    get_user_cart_and_items,
+    get_list_of_cart_items,
     get_cart_item,
     update_cart_items,
     update_cart_item,
@@ -31,8 +29,8 @@ cart_blueprint = Blueprint(
 @cart_blueprint.route("")
 def cart():
     if current_user.is_authenticated:
-        cart = get_user_cart()
-        cart_items = get_cart_items(cart)
+        cart = current_user.carts[0]
+        cart_items = get_list_of_cart_items()
         cart.total = 0
         cart.quantity = 0
         for item in cart_items:
@@ -130,8 +128,8 @@ def cart_clear():
 @cart_blueprint.route("/submit", methods=["POST"])
 def submit_cart():
     if current_user.is_authenticated:
-        cart = get_user_cart()
-        cart_items = cart.cart_items
+        cart = current_user.carts[0]
+        cart_items = cart.items
     else:
         cart_items = session["cart"]["cart_items"]
     if cart_items:

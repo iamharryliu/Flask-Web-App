@@ -36,7 +36,8 @@ def create_app(config_class=Config):
     admin.add_view(ModelView(Post, db.session))
     admin.add_view(ModelView(Product, db.session))
     admin.add_view(ModelView(Cart, db.session))
-    admin.add_view(ModelView(CartItem, db.session))
+    admin.add_view(ModelView(Item, db.session))
+    admin.add_view(ModelView(Order, db.session))
 
     from WebApp.main.routes import main
     from WebApp.users.routes import users_blueprint
