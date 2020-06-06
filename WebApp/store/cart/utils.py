@@ -8,14 +8,17 @@ from WebApp.store.products.forms import ItemForm
 import random, string
 
 
-# Create
+def create_anon_cart():
+    if "cart" not in session:
+        cart = {"total": 0, "cart_items": []}
+        session["cart"] = cart
 
 
 def add_item_to_cart(product):
     if current_user.is_authenticated:
         add_item_to_user_cart(product)
     else:
-        add_item_to_anonymous_cart(product)
+        add_item_to_anon_cart(product)
 
 
 def add_item_to_user_cart(product):
@@ -40,7 +43,7 @@ def add_item_to_user_cart(product):
     db.session.commit()
 
 
-def add_item_to_anonymous_cart(product):
+def add_item_to_anon_cart(product):
     form = ItemForm()
     quantity = form.quantity.data
     size = form.size.data
@@ -79,8 +82,49 @@ def get_list_of_cart_items():
     return items.all()
 
 
-def get_cart_item(id):
-    return Item.query.filter_by(id=id).first_or_404()
+def get_cart_and_cart_item_with_total_and_quantity():
+    if current_user.is_authenticated:
+        cart = current_user.carts[0]
+        cart_items = get_list_of_cart_items()
+        cart.total = 0
+        cart.quantity = 0
+        for item in cart_items:
+            cart.total += item.product.price * float(item.quantity)
+            cart.quantity += item.quantity
+    else:
+        cart = session["cart"]
+        cart_items = cart["cart_items"]
+        cart_total = 0
+        cart_quantity = 0
+        for item in cart_items:
+            cart_total += item["quantity"] * item["product"]["price"]
+            cart_quantity += item["quantity"]
+        cart["total"] = cart_total
+        cart["quantity"] = cart_quantity
+    return cart, cart_items
+
+
+def get_cart_item(item_id):
+    if current_user.is_authenticated:
+        return Item.query.filter_by(id=item_id).first_or_404()
+    else:
+        return next(
+            (item for item in session["cart"]["cart_items"] if item["id"] == item_id),
+            None,
+        )
+
+
+def get_cart_item_and_form(item_id):
+    form = ItemForm()
+    if current_user.is_authenticated:
+        item = get_cart_item(item_id)
+        form.quantity.data = str(item.quantity)
+        form.size.data = item.size
+    else:
+        item = get_cart_item(item_id)
+        form.quantity.data = str(item["quantity"])
+        form.size.data = item["size"]
+    return item, form
 
 
 # Update
@@ -105,19 +149,19 @@ def update_cart_items():
 
 def update_cart_item(item):
     form = ItemForm()
-    item.quantity = int(form.quantity.data)
-    item.size = form.size.data
-    db.session.commit()
-
-
-def update_cart_values():
-    items = get_list_of_cart_items()
-    cart.total = 0
-    cart.quantity = 0
-    for item in items:
-        cart.total += item.product.price * float(item.quantity)
-        cart.quantity += item.quantity
-    db.session.commit()
+    if current_user.is_authenticated:
+        item.quantity = int(form.quantity.data)
+        item.size = form.size.data
+        db.session.commit()
+    else:
+        item["quantity"] = int(form.quantity.data)
+        item["size"] = form.size.data
+        session["cart"]["cart_items"][:] = [
+            other_item
+            for other_item in session["cart"]["cart_items"]
+            if other_item["id"] != item["id"]
+        ]
+        session["cart"]["cart_items"].append(item)
 
 
 # Delete

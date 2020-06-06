@@ -26,6 +26,7 @@ from WebApp.users.utils import (
     set_new_password,
     handle_login,
 )
+from WebApp.store.cart.utils import create_anon_cart
 
 from WebApp.posts.utils import add_post, get_paginated_user_posts, get_redirects
 from WebApp.posts.forms import PostForm
@@ -68,8 +69,7 @@ def login():
 def logout():
     logout_user()
     session.clear()
-    cart = {"total": 0, "cart_items": []}
-    session["cart"] = cart
+    create_anon_cart()
     flash("You have been logged out.", "success")
     return redirect(url_for("main.home"))
 
