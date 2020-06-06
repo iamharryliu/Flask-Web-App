@@ -67,27 +67,27 @@
     </li>
     <li class="list-group-item">
         Contact: {{order_details.shipping_address.phone}} or {{order_details.shipping_address.email}}
-        <a class='float-right' href='{{ url_for("checkout_blueprint.checkout", subpath="shipping_address") }}'>
+        <a class='float-right' href='{{ url_for("checkout.checkout", subpath="shipping_address") }}'>
             Change
         </a>
     </li>
     <li class="list-group-item">
         Ship to: {{order_details.shipping_address.address}}, {{order_details.shipping_address.city}},
         {{order_details.shipping_address.province}}, {{order_details.shipping_address.postal_code}}
-        <a class='float-right' href='{{ url_for("checkout_blueprint.checkout", subpath="shipping_address") }}'>
+        <a class='float-right' href='{{ url_for("checkout.checkout", subpath="shipping_address") }}'>
             Change
         </a>
     </li>
     <li class="list-group-item">
         Bill to: {{order_details.billing_address.address}}, {{order_details.billing_address.city}},
         {{order_details.billing_address.province}}, {{order_details.billing_address.postal_code}}
-        <a class='float-right' href='{{ url_for("checkout_blueprint.checkout", subpath="billing_address") }}'>
+        <a class='float-right' href='{{ url_for("checkout.checkout", subpath="billing_address") }}'>
             Change
         </a>
     </li>
     <li class="list-group-item border-1">
         Method of delivery: {{order_details.shipping_option}}
-        <a class='float-right' href='{{ url_for("checkout_blueprint.shipping_option") }}'>
+        <a class='float-right' href='{{ url_for("checkout.shipping_option") }}'>
             Change
         </a>
     </li>

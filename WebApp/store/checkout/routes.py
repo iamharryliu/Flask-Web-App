@@ -4,7 +4,7 @@ from WebApp.store.forms import CheckoutForm
 from WebApp.store.utils import process_order
 
 checkout_blueprint = Blueprint(
-    "checkout_blueprint", __name__, url_prefix="/checkout", template_folder="templates"
+    "checkout", __name__, url_prefix="/checkout", template_folder="templates"
 )
 
 
@@ -14,7 +14,7 @@ def checkout():
     if form.validate_on_submit():
         process_order()
         flash("Order has been processsed.", "success")
-        return redirect(url_for("checkout_blueprint.checkout_success"))
+        return redirect(url_for("checkout.checkout_success"))
     return render_template("checkout.html", title="Checkout", form=form)
 
 

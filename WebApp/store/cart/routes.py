@@ -68,7 +68,7 @@ def cart_clear():
 def submit_cart():
     cart_items = get_list_of_cart_items()
     if cart_items:
-        return redirect(url_for("checkout_blueprint.checkout"))
+        return redirect(url_for("checkout.checkout"))
     else:
         flash("Add items to cart to checkout.", "danger")
         return redirect(url_for("cart_blueprint.cart"))
