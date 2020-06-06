@@ -4,9 +4,9 @@ from flask_admin.contrib.sqla import ModelView
 from WebApp.config import Config
 
 
-class ModelView(ModelView):
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.username in Config.ADMINS
+# class ModelView(ModelView):
+#     def is_accessible(self):
+#         return current_user.is_authenticated and current_user.username in Config.ADMINS
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -14,5 +14,5 @@ class MyAdminIndexView(AdminIndexView):
     def index(self):
         return self.render("admin/index.html")
 
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.username in Config.ADMINS
+    # def is_accessible(self):
+    #     return current_user.is_authenticated and current_user.username in Config.ADMINS
