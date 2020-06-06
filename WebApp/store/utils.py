@@ -1,11 +1,32 @@
 from flask import session, request
 from flask_login import current_user
 from WebApp import db
-from WebApp.models import Cart, Item
+from WebApp.models import Product, Cart, Item
 from WebApp.store.products.forms import ItemForm
 
 
 import random, string
+
+
+def get_all_products():
+    products = Product.query.all()
+    return products
+
+
+def get_product(id):
+    product = Product.query.get_or_404(id)
+    return product
+
+
+def search_products(search):
+    products = Product.query.filter(
+        Product.name.like(f"%{search}%")
+        | Product.description.like(f"%{search}%")
+        | Product.color.like(f"%{search}%")
+        | Product.description.like(f"%{search}%")
+        | Product.code.like(f"%{search}%")
+    )
+    return products
 
 
 def create_anon_cart():
@@ -190,3 +211,15 @@ def delete_all_cart_items():
 
 def delete_all_cart_items_anon():
     session["cart"]["cart_items"] = []
+
+
+def process_order():
+    user = current_user
+    cart = Cart(customer=user)
+    db.session.add(cart)
+    db.session.commit()
+    send_order_email()
+
+
+def send_order_email():
+    pass

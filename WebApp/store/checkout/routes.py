@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, session, flash
 from flask_login import login_required, current_user
 from WebApp.store.checkout.forms import CheckoutForm
-from WebApp.store.checkout.utils import process_order
+from WebApp.store.utils import process_order
 from WebApp.models import Order
 from WebApp import db
 
