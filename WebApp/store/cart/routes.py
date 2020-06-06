@@ -9,9 +9,8 @@ from flask import (
     flash,
 )
 from flask_login import login_required, current_user
-
-from WebApp.store.products.forms import ItemForm
 from WebApp.models import Cart
+from WebApp.store.forms import ItemForm
 from WebApp.store.utils import (
     get_cart_and_cart_item_with_total_and_quantity,
     get_cart_item_and_form,

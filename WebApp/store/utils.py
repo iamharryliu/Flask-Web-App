@@ -1,8 +1,8 @@
 from flask import session, request
 from flask_login import current_user
 from WebApp import db
-from WebApp.models import Product, Cart, Item
-from WebApp.store.products.forms import ItemForm
+from WebApp.models import Product, Item, Cart
+from WebApp.store.forms import ItemForm
 
 
 import random, string
@@ -113,6 +113,7 @@ def get_cart_and_cart_item_with_total_and_quantity():
             cart.total += item.product.price * float(item.quantity)
             cart.quantity += item.quantity
     else:
+        # create_anon_cart()
         cart = session["cart"]
         cart_items = cart["cart_items"]
         cart_total = 0

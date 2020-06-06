@@ -8,7 +8,7 @@
 		<div class="collapse navbar-collapse" id="navbarToggle">
 			<div class="navbar-nav mr-auto">
 
-				<li class="nav-item dropdown">
+				<!-- <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Components
@@ -19,6 +19,12 @@
 						<a class="dropdown-item" href="{{ url_for('products_blueprint.products') }}">Shop</a>
 						<a class="dropdown-item" href="{{ url_for('cart_blueprint.cart') }}">Cart</a>
 					</div>
+				</li> -->
+				<li>
+					<a class="nav-item nav-link" href="{{ url_for('products_blueprint.products') }}">Shop</a>
+				</li>
+				<li>
+					<a class="nav-item nav-link" href="{{ url_for('cart_blueprint.cart') }}">Cart</a>
 				</li>
 				<li>
 					<a class="nav-item nav-link" href="{{ url_for('main.contact') }}">Contact Us</a>

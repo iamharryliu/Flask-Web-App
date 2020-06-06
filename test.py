@@ -67,27 +67,6 @@ class TestClass(unittest.TestCase):
             )
             db.session.add(order)
 
-    # def test_error(self):
-    #     with self.assertRaises(ValueError):
-    #         x, y = 10, 0
-    #         if y == 0:
-    #             raise ValueError()
-    #         print(x / y)
-
-    # def test_mock(self):
-    #     with patch("requests.get") as mocked_get:
-
-    #         mocked_get.return_value.ok = True
-    #         mocked_get.return_value.text = "Success"
-    #         schedule = self.something1.make_request()
-    #         mocked_get.assert_called_with("url")  # test correct url
-    #         self.assertEqual(schedule, "Success")
-
-    #         mocked_get.return_value.ok = False
-    #         schedule = self.something1.make_request()
-    #         mocked_get.assert_called_with("url")
-    #         self.assertEqual(schedule, "Bad Response!")
-
 
 test_users = [
     {"username": "johndoe", "email": "johndoe@gmail.com", "password": "password"},

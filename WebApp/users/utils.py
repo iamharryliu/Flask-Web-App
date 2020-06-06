@@ -1,6 +1,4 @@
-import os
-import secrets
-from PIL import Image
+
 from flask import url_for, current_app, flash, redirect, request, session
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
@@ -13,7 +11,9 @@ from WebApp.users.forms import (
     RequestResetForm,
     ResetPasswordForm,
 )
-import re
+
+import os, re, secrets
+from PIL import Image
 
 
 def register_user():

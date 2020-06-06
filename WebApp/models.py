@@ -1,9 +1,10 @@
+from flask import current_app
+from flask_login import UserMixin, AnonymousUserMixin
+from WebApp import db, login_manager
+
 import uuid
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
-from WebApp import db, login_manager
-from flask_login import UserMixin, AnonymousUserMixin
 
 
 @login_manager.user_loader
@@ -104,6 +105,8 @@ class Cart(db.Model):
 
 
 class Item(db.Model):
+    order_id = db.Column(db.Integer, db.ForeignKey("order.id"))
+
     id = db.Column(db.Integer, primary_key=True)
     cart_id = db.Column(db.Integer, db.ForeignKey("cart.id"), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey("product.id"), nullable=False)
@@ -112,6 +115,10 @@ class Item(db.Model):
 
 
 class Order(db.Model):
+    items = db.relationship(
+        "Item", backref="processed_order", cascade="all,delete", lazy=True
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
     checkout_cart = db.relationship("Cart", backref="processed_order", uselist=False)

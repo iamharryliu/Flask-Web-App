@@ -39,7 +39,7 @@ def create_app(config_class=Config):
     admin.add_view(ModelView(Item, db.session))
     admin.add_view(ModelView(Order, db.session))
 
-    from WebApp.main.routes import main
+    from WebApp.main.routes import main_blueprint
     from WebApp.users.routes import users_blueprint
     from WebApp.posts.routes import posts_blueprint
     from WebApp.errors.handlers import errors
@@ -47,7 +47,7 @@ def create_app(config_class=Config):
     from WebApp.store.cart.routes import cart_blueprint
     from WebApp.store.checkout.routes import checkout_blueprint
 
-    app.register_blueprint(main)
+    app.register_blueprint(main_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(posts_blueprint)
     app.register_blueprint(errors)

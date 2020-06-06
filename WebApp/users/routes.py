@@ -26,8 +26,8 @@ from WebApp.users.utils import (
     set_new_password,
     handle_login,
 )
-from WebApp.posts.utils import add_post, get_paginated_user_posts, get_redirects
 from WebApp.posts.forms import PostForm
+from WebApp.posts.utils import add_post, get_paginated_user_posts, get_redirects
 from WebApp.store.utils import create_anon_cart
 
 users_blueprint = Blueprint("users_blueprint", __name__, template_folder="templates")

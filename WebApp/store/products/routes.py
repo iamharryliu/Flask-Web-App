@@ -1,8 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, abort, request, flash
 from flask_login import current_user
-from WebApp.store.products.forms import ItemForm
-from WebApp.store.utils import get_all_products, get_product, search_products
-from WebApp.store.utils import add_item_to_cart
+from WebApp.store.forms import ItemForm
+from WebApp.store.utils import (
+    get_all_products,
+    get_product,
+    search_products,
+    add_item_to_cart,
+)
 
 
 products_blueprint = Blueprint(
