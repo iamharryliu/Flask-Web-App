@@ -3,7 +3,7 @@
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/store.css') }}">
 <div class='mb-3'>
-    <form method='POST' action="{{url_for('products_blueprint.search')}}" id='search'>
+    <form method='POST' action="{{url_for('products.search')}}" id='search'>
         <div class="input-group">
             <input type="text" name='search' class="form-control" placeholder="Search for.." autocomplete="off">
             <div class="input-group-append">
@@ -16,7 +16,7 @@
 
 <div class="products row">
     {% for product in products %}
-    <a href="{{url_for('products_blueprint.product', product_id=product.id) }}" class="btn col-sm-6 col-lg-4 col-xl-3">
+    <a href="{{url_for('products.product', product_id=product.id) }}" class="btn col-sm-6 col-lg-4 col-xl-3">
         <img class="img-fluid mb-3"
             src="{{ url_for('static', filename='images/store/products/' + product.image_file) }}">
         <h5>{{product.name}}</h5>

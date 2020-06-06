@@ -10,10 +10,7 @@ from WebApp.store.utils import (
 
 
 products_blueprint = Blueprint(
-    "products_blueprint",
-    __name__,
-    url_prefix="/store/products",
-    template_folder="templates",
+    "products", __name__, url_prefix="/store/products", template_folder="templates"
 )
 
 
@@ -40,7 +37,7 @@ def product(product_id):
             f"{form.quantity.data} x {product.name} ({form.size.data}) added to your cart.",
             "success",
         )
-        return redirect(url_for("products_blueprint.products", product_id=product_id))
+        return redirect(url_for("products.products", product_id=product_id))
     return render_template(
         "products/product-item.html", title=product.name, product=product, form=form
     )
