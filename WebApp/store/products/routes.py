@@ -30,15 +30,6 @@ def products():
 def product(product_id):
     product = get_product(product_id)
     form = ItemForm()
-    return render_template(
-        "products/product-item.html", title=product.name, product=product, form=form
-    )
-
-
-@products_blueprint.route("/<int:product_id>/add", methods=["POST"])
-def add_item_to_cart_route(product_id):
-    product = get_product(product_id)
-    form = ItemForm()
     if form.validate_on_submit():
         add_item_to_cart(product)
         flash(
@@ -46,4 +37,6 @@ def add_item_to_cart_route(product_id):
             "success",
         )
         return redirect(url_for("products_blueprint.products", product_id=product_id))
-    return redirect(url_for("products_blueprint.product", product_id=product_id))
+    return render_template(
+        "products/product-item.html", title=product.name, product=product, form=form
+    )

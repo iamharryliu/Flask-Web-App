@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, SubmitField
+from wtforms.validators import DataRequired
 
 default_option = [(None, "Select")]
 
@@ -16,6 +17,8 @@ quantity_choices = default_option + [(str(n), n) for n in range(1, 11)]
 
 
 class ItemForm(FlaskForm):
-    quantity = SelectField("Quantity", choices=quantity_choices)
-    size = SelectField("Size", choices=size_choices)
+    quantity = SelectField(
+        "Quantity", choices=quantity_choices, validators=[DataRequired()]
+    )
+    size = SelectField("Size", choices=size_choices, validators=[DataRequired()])
     submit = SubmitField("Submit")
