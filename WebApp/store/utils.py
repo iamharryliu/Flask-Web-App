@@ -117,7 +117,7 @@ def get_cart_and_cart_item_with_total_and_quantity():
             cart.total += item.product.price * float(item.quantity)
             cart.quantity += item.quantity
     else:
-        # create_anon_cart()
+        create_anon_cart()
         cart = session["cart"]
         cart_items = cart["cart_items"]
         cart_total = 0
@@ -145,6 +145,7 @@ def get_cart_item_and_form(item_id):
     if current_user.is_authenticated:
         item = get_cart_item(item_id)
         form.quantity.data = str(item.quantity)
+        print(item.quantity, item.size)
         form.size.data = item.size
     else:
         item = get_cart_item(item_id)
