@@ -50,9 +50,9 @@ def create_app(config_class=Config):
     app.register_blueprint(main_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(posts_blueprint)
-    app.register_blueprint(errors)
     app.register_blueprint(products_blueprint)
     app.register_blueprint(cart_blueprint)
     app.register_blueprint(checkout_blueprint)
+    app.register_blueprint(errors)
 
     return app
