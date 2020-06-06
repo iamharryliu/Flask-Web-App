@@ -35,7 +35,7 @@ class TestClass(unittest.TestCase):
         for user in User.query.all():
             cart = user.carts[0]
             for product in Product.query.all():
-                cart_item = Item(cart_id=cart.id, product_id=product.id, size="S")
+                cart_item = Item(cart_id=cart.id, product_id=product.id, size="Small")
                 db.session.add(cart_item)
             order = Order(
                 customer=user,
