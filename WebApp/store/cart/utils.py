@@ -72,8 +72,11 @@ def get_cart_items_query():
 
 
 def get_list_of_cart_items():
-    items = get_cart_items_query()
-    return items.order_by(Item.id.desc()).all()
+    if current_user.is_authenticated:
+        items = get_cart_items_query()
+    else:
+        items = session["cart"]["cart_items"]
+    return items.all()
 
 
 def get_cart_item(id):
@@ -84,21 +87,20 @@ def get_cart_item(id):
 
 
 def update_cart_items():
-    items = get_cart_items_query().order_by(Item.id.desc()).all()
-    ids = request.form.keys()
-    for _id in ids:
-        for item in items:
-            if item.id == int(_id):
-                item.quantity = int(int(request.form[_id]))
-    db.session.commit()
-
-
-def update_cart_items_anon():
-    ids = request.form.keys()
-    for _id in ids:
-        for item in session["cart"]["cart_items"]:
-            if item["id"] == _id:
-                item["quantity"] = int(request.form[item["id"]])
+    if current_user.is_authenticated:
+        items = get_cart_items_query().order_by(Item.id.desc()).all()
+        ids = request.form.keys()
+        for _id in ids:
+            for item in items:
+                if item.id == int(_id):
+                    item.quantity = int(int(request.form[_id]))
+        db.session.commit()
+    else:
+        ids = request.form.keys()
+        for _id in ids:
+            for item in session["cart"]["cart_items"]:
+                if item["id"] == _id:
+                    item["quantity"] = int(request.form[item["id"]])
 
 
 def update_cart_item(item):
@@ -122,21 +124,24 @@ def update_cart_values():
 
 
 def delete_cart_item(item_id):
-    item = get_cart_item(item_id)
-    db.session.delete(item)
-    db.session.commit()
-
-
-def delete_cart_item_anon(item_id):
-    session["cart"]["cart_items"] = [
-        item for item in session["cart"]["cart_items"] if item["id"] != item_id
-    ]
+    if current_user.is_authenticated:
+        item = get_cart_item(item_id)
+        db.session.delete(item)
+        db.session.commit()
+    else:
+        items = session["cart"]["cart_items"]
+        session["cart"]["cart_items"] = [
+            item for item in items if item["id"] != item_id
+        ]
 
 
 def delete_all_cart_items():
-    cart_items = get_cart_items_query()
-    cart_items.delete()
-    db.session.commit()
+    if current_user.is_authenticated:
+        cart_items = get_cart_items_query()
+        cart_items.delete()
+        db.session.commit()
+    else:
+        session["cart"]["cart_items"] = []
 
 
 def delete_all_cart_items_anon():

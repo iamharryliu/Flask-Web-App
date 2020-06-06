@@ -1,9 +1,22 @@
-<p>{{request.endpoint}}</p>
-<p>{{request}}</p>
-<p>{{session['cart']}}</p>
-<p>{{session}}</p>
 <p>
-    {% if form and form.errors %}
-    {{ form.errors}}
-    {% endif %}
+    Endpoint <br />
+    {{request.endpoint}}
 </p>
+<p>
+    User Id: {{current_user.id}}<br />
+    Authenticated: {{current_user.is_authenticated}}
+</p>
+<p>{{session}}</p>
+{% if session['cart'] %}
+<p>
+    Cart<br />
+    {{session['cart']}}
+</p>
+
+{% endif %}
+{% if form and form.errors %}
+<p>
+    Errors<br />
+    {{ form.errors}}
+</p>
+{% endif %}

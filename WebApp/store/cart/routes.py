@@ -16,12 +16,9 @@ from WebApp.store.cart.utils import (
     get_list_of_cart_items,
     get_cart_item,
     update_cart_items,
-    update_cart_items_anon,
     update_cart_item,
     delete_cart_item,
-    delete_cart_item_anon,
     delete_all_cart_items,
-    delete_all_cart_items_anon,
 )
 
 
@@ -57,10 +54,7 @@ def cart():
 
 @cart_blueprint.route("/update", methods=["POST"])
 def cart_update():
-    if current_user.is_authenticated:
-        update_cart_items()
-    else:
-        update_cart_items_anon()
+    update_cart_items()
     return redirect(url_for("cart_blueprint.cart"))
 
 
@@ -98,29 +92,19 @@ def cart_item_update(item_id):
 
 @cart_blueprint.route("/<item_id>/delete", methods=["POST"])
 def cart_delete_item(item_id):
-    if current_user.is_authenticated:
-        delete_cart_item(item_id)
-    else:
-        delete_cart_item_anon(item_id)
+    delete_cart_item(item_id)
     return redirect(url_for("cart_blueprint.cart"))
 
 
 @cart_blueprint.route("/clear", methods=["POST"])
 def cart_clear():
-    if current_user.is_authenticated:
-        delete_all_cart_items()
-    else:
-        delete_all_cart_items_anon()
+    delete_all_cart_items()
     return redirect(url_for("cart_blueprint.cart"))
 
 
 @cart_blueprint.route("/submit", methods=["POST"])
 def submit_cart():
-    if current_user.is_authenticated:
-        cart = current_user.carts[0]
-        cart_items = cart.items
-    else:
-        cart_items = session["cart"]["cart_items"]
+    cart_items = get_list_of_cart_items()
     if cart_items:
         return redirect(url_for("checkout_blueprint.checkout"))
     else:
