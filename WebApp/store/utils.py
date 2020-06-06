@@ -1,32 +1,14 @@
 from flask import session, request
 from flask_login import current_user
 from WebApp import db
-from WebApp.models import Product, Item, Cart
-from WebApp.store.forms import ItemForm
+from WebApp.models import Product, Item, Cart, Order
+from WebApp.store.forms import ItemForm, CheckoutForm
 
 
 import random, string
 
 
-def get_all_products():
-    products = Product.query.all()
-    return products
-
-
-def get_product(id):
-    product = Product.query.get_or_404(id)
-    return product
-
-
-def search_products(search):
-    products = Product.query.filter(
-        Product.name.like(f"%{search}%")
-        | Product.description.like(f"%{search}%")
-        | Product.color.like(f"%{search}%")
-        | Product.description.like(f"%{search}%")
-        | Product.code.like(f"%{search}%")
-    )
-    return products
+# Create
 
 
 def create_anon_cart():
@@ -90,6 +72,27 @@ def add_item_to_anon_cart(product):
 # Read
 
 
+def get_all_products():
+    products = Product.query.all()
+    return products
+
+
+def get_product(id):
+    product = Product.query.get_or_404(id)
+    return product
+
+
+def search_products(search):
+    products = Product.query.filter(
+        Product.name.like(f"%{search}%")
+        | Product.description.like(f"%{search}%")
+        | Product.color.like(f"%{search}%")
+        | Product.description.like(f"%{search}%")
+        | Product.code.like(f"%{search}%")
+    )
+    return products
+
+
 def get_cart_items_query():
     cart = current_user.carts[0]
     return Item.query.filter_by(cart_id=cart.id)
@@ -98,9 +101,10 @@ def get_cart_items_query():
 def get_list_of_cart_items():
     if current_user.is_authenticated:
         items = get_cart_items_query()
+        items = items.all()
     else:
         items = session["cart"]["cart_items"]
-    return items.all()
+    return items
 
 
 def get_cart_and_cart_item_with_total_and_quantity():
@@ -215,11 +219,41 @@ def delete_all_cart_items_anon():
 
 
 def process_order():
-    user = current_user
-    cart = Cart(customer=user)
-    db.session.add(cart)
+    # user = current_user
+    # cart = Cart(customer=user)
+    # send_order_email()
+    form = CheckoutForm()
+    newsletter_sub = form.newsletter_sub.data
+    order = Order(
+        email=form.email.data,
+        shipping_first_name=form.shipping_first_name.data,
+        shipping_last_name=form.shipping_last_name.data,
+        shipping_address=form.shipping_address.data,
+        shipping_address_unit=form.shipping_address_unit.data,
+        shipping_city=form.shipping_city.data,
+        shipping_region=form.shipping_region.data,
+        shipping_country=form.shipping_country.data,
+        shipping_postal_code=form.shipping_postal_code.data,
+        shipping_phone_number=form.shipping_phone_number.data,
+        shipping_method=form.shipping_method.data,
+        card_number=form.card_number.data,
+        card_name=form.card_name.data,
+        card_expiration_month=form.card_expiration_month.data,
+        card_expiration_year=form.card_expiration_year.data,
+        billing_first_name=form.billing_first_name.data,
+        billing_last_name=form.billing_last_name.data,
+        billing_address=form.billing_address.data,
+        billing_address_unit=form.billing_address_unit.data,
+        billing_city=form.billing_city.data,
+        billing_region=form.billing_region.data,
+        billing_country=form.billing_country.data,
+        billing_postal_code=form.billing_postal_code.data,
+        billing_phone_number=form.billing_phone_number.data,
+    )
+    if current_user.is_authenticated:
+        order.customer = current_user
+    db.session.add(order)
     db.session.commit()
-    send_order_email()
 
 
 def send_order_email():
