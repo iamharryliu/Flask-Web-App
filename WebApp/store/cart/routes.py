@@ -1,23 +1,27 @@
 from flask import (
     Blueprint,
     render_template,
-    url_for,
-    redirect,
     request,
     session,
-    flash,
     abort,
+    redirect,
+    url_for,
+    flash,
 )
 from flask_login import login_required, current_user
+
 from WebApp.store.products.forms import ItemForm
 from WebApp.models import Cart
 from WebApp.store.cart.utils import (
     get_list_of_cart_items,
     get_cart_item,
     update_cart_items,
+    update_cart_items_anon,
     update_cart_item,
     delete_cart_item,
+    delete_cart_item_anon,
     delete_all_cart_items,
+    delete_all_cart_items_anon,
 )
 
 
@@ -56,22 +60,15 @@ def cart_update():
     if current_user.is_authenticated:
         update_cart_items()
     else:
-        ids = request.form.keys()
-        for _id in ids:
-            for item in session["cart"]["cart_items"]:
-                if item["id"] == _id:
-                    item["quantity"] = int(request.form[item["id"]])
+        update_cart_items_anon()
     return redirect(url_for("cart_blueprint.cart"))
 
 
 @cart_blueprint.route("/<item_id>", methods=["GET", "POST"])
-def cart_item_edit(item_id):
+def cart_item_update(item_id):
     form = ItemForm()
     if current_user.is_authenticated:
         item = get_cart_item(item_id)
-        cart = Cart.query.get(item.cart_id)
-        if cart.customer != current_user:
-            abort(403)
         if form.validate_on_submit():
             update_cart_item(item)
             return redirect(url_for("cart_blueprint.cart"))
@@ -102,17 +99,9 @@ def cart_item_edit(item_id):
 @cart_blueprint.route("/<item_id>/delete", methods=["POST"])
 def cart_delete_item(item_id):
     if current_user.is_authenticated:
-        cart_item = get_cart_item(item_id)
-        cart = cart_item.cart
-        if cart.customer != current_user:
-            abort(403)
-        delete_cart_item(cart_item)
+        delete_cart_item(item_id)
     else:
-        print(item_id)
-        session["cart"]["cart_items"] = [
-            item for item in session["cart"]["cart_items"] if item["id"] != item_id
-        ]
-
+        delete_cart_item_anon(item_id)
     return redirect(url_for("cart_blueprint.cart"))
 
 
@@ -121,7 +110,7 @@ def cart_clear():
     if current_user.is_authenticated:
         delete_all_cart_items()
     else:
-        session["cart"]["cart_items"] = []
+        delete_all_cart_items_anon()
     return redirect(url_for("cart_blueprint.cart"))
 
 

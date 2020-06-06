@@ -93,6 +93,14 @@ def update_cart_items():
     db.session.commit()
 
 
+def update_cart_items_anon():
+    ids = request.form.keys()
+    for _id in ids:
+        for item in session["cart"]["cart_items"]:
+            if item["id"] == _id:
+                item["quantity"] = int(request.form[item["id"]])
+
+
 def update_cart_item(item):
     form = ItemForm()
     item.quantity = int(form.quantity.data)
@@ -113,12 +121,23 @@ def update_cart_values():
 # Delete
 
 
-def delete_cart_item(cart_item):
-    db.session.delete(cart_item)
+def delete_cart_item(item_id):
+    item = get_cart_item(item_id)
+    db.session.delete(item)
     db.session.commit()
+
+
+def delete_cart_item_anon(item_id):
+    session["cart"]["cart_items"] = [
+        item for item in session["cart"]["cart_items"] if item["id"] != item_id
+    ]
 
 
 def delete_all_cart_items():
     cart_items = get_cart_items_query()
     cart_items.delete()
     db.session.commit()
+
+
+def delete_all_cart_items_anon():
+    session["cart"]["cart_items"] = []
