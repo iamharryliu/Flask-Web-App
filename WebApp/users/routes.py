@@ -40,7 +40,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         register_user()
-        return redirect(url_for("users_blueprint.login"))
+        return redirect(url_for("users.login"))
     return render_template("users/register.html", title="Register", form=form)
 
 
@@ -49,7 +49,7 @@ def confirm_email_token(token):
     user = User.verify_confirm_email_token(token)
     if user is None:
         flash("Invalid or expired token.", "warning")
-        return redirect(url_for("users_blueprint.register"))
+        return redirect(url_for("users.register"))
     confirm_email(user)
     return redirect(url_for("posts.posts"))
 
@@ -104,7 +104,7 @@ def account_settings():
     if form.validate_on_submit():
         update_user_info()
         return redirect(
-            url_for("users_blueprint.account_settings", username=current_user.username)
+            url_for("users.account_settings", username=current_user.username)
         )
     form.username.data = current_user.username
     form.email.data = current_user.email
@@ -124,7 +124,7 @@ def reset_request():
     form = RequestResetForm()
     if form.validate_on_submit():
         send_reset_request_email()
-        return redirect(url_for("users_blueprint.login"))
+        return redirect(url_for("users.login"))
     return render_template(
         "users/reset_request.html", title="Reset Password", form=form
     )
@@ -137,7 +137,7 @@ def reset_password_token(token):
     user = User.verify_reset_password_token(token)
     if user is None:
         flash("Invalid or expired token.", "warning")
-        return redirect(url_for("users_blueprint.reset_request"))
+        return redirect(url_for("users.reset_request"))
     form = ResetPasswordForm()
     if form.validate_on_submit():
         set_new_password(user)

@@ -10,7 +10,7 @@ from WebApp.admin import MyAdminIndexView, ModelView
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
-login_manager.login_view = "users_blueprint.login"
+login_manager.login_view = "users.login"
 login_manager.login_message_category = "info"
 mail = Mail()
 admin = Admin(index_view=MyAdminIndexView())

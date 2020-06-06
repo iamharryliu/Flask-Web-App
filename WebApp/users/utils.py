@@ -26,7 +26,7 @@ def register_user():
     db.session.add(user)
     db.session.add(cart)
     db.session.commit()
-    send_register_email(user)
+    # send_register_email(user)
     flash(f"Account created for {form.username.data}! You can now login.", "success")
 
 
