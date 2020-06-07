@@ -1,7 +1,7 @@
 {% extends "checkout/checkout_layout.html" %}
 {% block checkout %}
 <form method="post" id="submit_order"></form>
-<form id='update_cart' method='post' action='{{ url_for("cart_blueprint.cart_update") }}'></form>
+<form id='update_cart' method='post' action='{{ url_for("store.cart_update") }}'></form>
 <ul class="list-group">
     <button class="list-group-item" data-toggle="collapse" data-target="#order_summary">
         Show Order Summary
@@ -22,8 +22,8 @@
                     Size: {{ item.size }}<br>
                     Color: {{ item.product.color }}<br>
                     <a class='btn btn-outline-info'
-                        href='{{ url_for("cart_blueprint.cart_item_update", item_id=item.id ) }}'>Edit</a>
-                    <form action='{{ url_for("cart_blueprint.cart_delete_item", item_id=item.id) }}' method='POST'
+                        href='{{ url_for("store.cart_item_update", item_id=item.id ) }}'>Edit</a>
+                    <form action='{{ url_for("store.cart_delete_item", item_id=item.id) }}' method='POST'
                         style='display: inline;'>
                         <input class='btn btn-outline-danger' type='submit' value='Remove'>
                     </form><br><br>
@@ -67,21 +67,21 @@
     </li>
     <li class="list-group-item">
         Contact: {{order_details.shipping_address.phone}} or {{order_details.shipping_address.email}}
-        <a class='float-right' href='{{ url_for("checkout.checkout", subpath="shipping_address") }}'>
+        <a class='float-right' href='{{ url_for("store.checkout", subpath="shipping_address") }}'>
             Change
         </a>
     </li>
     <li class="list-group-item">
         Ship to: {{order_details.shipping_address.address}}, {{order_details.shipping_address.city}},
         {{order_details.shipping_address.province}}, {{order_details.shipping_address.postal_code}}
-        <a class='float-right' href='{{ url_for("checkout.checkout", subpath="shipping_address") }}'>
+        <a class='float-right' href='{{ url_for("store.checkout", subpath="shipping_address") }}'>
             Change
         </a>
     </li>
     <li class="list-group-item">
         Bill to: {{order_details.billing_address.address}}, {{order_details.billing_address.city}},
         {{order_details.billing_address.province}}, {{order_details.billing_address.postal_code}}
-        <a class='float-right' href='{{ url_for("checkout.checkout", subpath="billing_address") }}'>
+        <a class='float-right' href='{{ url_for("store.checkout", subpath="billing_address") }}'>
             Change
         </a>
     </li>

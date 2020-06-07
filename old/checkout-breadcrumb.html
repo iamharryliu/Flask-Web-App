@@ -4,13 +4,13 @@
 		{% if title == 'Cart' %}
 		<li class="breadcrumb-item active">Cart</li>
 		{% else %}
-		<li class="breadcrumb-item"><a href='{{ url_for("cart_blueprint.cart") }}'>Cart</a></li>
+		<li class="breadcrumb-item"><a href='{{ url_for("store.cart") }}'>Cart</a></li>
 		{% endif %}
 
 		{% if title == 'Shipping Address' %}
 		<li class="breadcrumb-item active">Shipping Address</li>
 		{% elif session['cart'] %}
-		<li class="breadcrumb-item"><a href='{{ url_for("checkout.checkout", subpath="shipping_address") }}'>Shipping
+		<li class="breadcrumb-item"><a href='{{ url_for("store.checkout", subpath="shipping_address") }}'>Shipping
 				Address</a></li>
 		{% endif %}
 
@@ -24,7 +24,7 @@
 		{% if title == 'Billing Address' %}
 		<li class="breadcrumb-item active">Billing Address</li>
 		{% elif session['shipping_option'] %}
-		<li class="breadcrumb-item"><a href='{{ url_for("checkout.checkout", subpath="billing_address") }}'>Billing
+		<li class="breadcrumb-item"><a href='{{ url_for("store.checkout", subpath="billing_address") }}'>Billing
 				Address</a></li>
 		{% endif %}
 

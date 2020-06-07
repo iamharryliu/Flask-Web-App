@@ -16,15 +16,15 @@
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{ url_for('posts.posts') }}">Posts</a>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="{{ url_for('products.products') }}">Shop</a>
-						<a class="dropdown-item" href="{{ url_for('cart_blueprint.cart') }}">Cart</a>
+						<a class="dropdown-item" href="{{ url_for('store.products') }}">Shop</a>
+						<a class="dropdown-item" href="{{ url_for('store.cart') }}">Cart</a>
 					</div>
 				</li> -->
 				<li>
-					<a class="nav-item nav-link" href="{{ url_for('products.products') }}">Shop</a>
+					<a class="nav-item nav-link" href="{{ url_for('store.products') }}">Shop</a>
 				</li>
 				<li>
-					<a class="nav-item nav-link" href="{{ url_for('cart_blueprint.cart') }}">Cart</a>
+					<a class="nav-item nav-link" href="{{ url_for('store.cart') }}">Cart</a>
 				</li>
 				<li>
 					<a class="nav-item nav-link" href="{{ url_for('main.contact') }}">Contact Us</a>

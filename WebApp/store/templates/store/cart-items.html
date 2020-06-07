@@ -10,12 +10,11 @@
 		Price: ${{ '%0.2f' | format(item.product.price) }} <br />
 		Size: {{ item.size }}<br />
 		Color: {{ item.product.color }}<br />
-		<a class='btn btn-link' href='{{ url_for("cart_blueprint.cart_item_update", item_id=item.id ) }}'>Edit</a>|
-		<form action='{{ url_for("cart_blueprint.cart_delete_item", item_id=item.id) }}' method='POST'
-			style='display: inline;'>
+		<a class='btn btn-link' href='{{ url_for("store.cart_item_update", item_id=item.id ) }}'>Edit</a>|
+		<form action='{{ url_for("store.cart_delete_item", item_id=item.id) }}' method='POST' style='display: inline;'>
 			<input class='btn btn-link' type='submit' value='Remove'>
 		</form>|
-		<form class='d-inline' method='post' action='{{ url_for("cart_blueprint.cart_update") }}'>
+		<form class='d-inline' method='post' action='{{ url_for("store.cart_update") }}'>
 			<select class='custom-select d-inline' id='{{item.id}}' name='{{ item.id }}'
 				style='width: 4em; text-align-last: center'>
 				{% for value in range(1,11) %}
