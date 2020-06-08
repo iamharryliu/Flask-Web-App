@@ -11,3 +11,8 @@ class ContactForm(FlaskForm):
     message = TextAreaField("Message", validators=[DataRequired()])
     recaptcha = RecaptchaField()
     submit = SubmitField("Send")
+
+
+class NewsletterForm(FlaskForm):
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    submit = SubmitField("Subscribe")

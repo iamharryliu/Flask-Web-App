@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, session
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from flask_login import current_user
 from WebApp.main.forms import ContactForm
 from WebApp.main.utils import handle_contact_message
@@ -19,3 +19,10 @@ def contact():
         flash(f"Your message has been sent.", "success")
         return redirect(url_for("main.home"))
     return render_template("main/contact.html", title="Contact", form=form)
+
+
+@main_blueprint.route("/subscribe_to_newsletter", methods=["POST"])
+def subscribe_to_newsletter():
+    email = request.form["email"]
+    flash(f"You are now subscribed to the newsletter, {email}", "success")
+    return redirect(request.referrer)

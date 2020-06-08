@@ -20,16 +20,13 @@ class TestClass(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
-        # db.drop_all()
-        # db.create_all()
-        # create_users()
+        db.session.commit()
 
-    # def setUp(self):
-    #     print("setUp")
+    def setUp(self):
+        pass
 
     def tearDown(self):
-        db.session.commit()
+        pass
 
     def test_cart(self):
         for user in User.query.all():
