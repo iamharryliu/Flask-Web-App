@@ -32,6 +32,7 @@ def create_app(config_class=Config):
     with app.app_context():
         db.create_all()
 
+    admin.add_view(ModelView(Subscriber, db.session))
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Post, db.session))
     admin.add_view(ModelView(Product, db.session))

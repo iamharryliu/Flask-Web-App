@@ -1,3 +1,6 @@
+from WebApp.models import Subscriber
+from WebApp import db
+
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from flask_login import current_user
 from WebApp.main.forms import ContactForm
@@ -24,5 +27,11 @@ def contact():
 @main_blueprint.route("/subscribe_to_newsletter", methods=["POST"])
 def subscribe_to_newsletter():
     email = request.form["email"]
-    flash(f"You are now subscribed to the newsletter, {email}", "success")
+    if not Subscriber.query.filter_by(email=email).first():
+        subscriber = Subscriber(email=email)
+        db.session.add(subscriber)
+        db.session.commit()
+        flash(f"You are now subscribed to the newsletter, {email}", "success")
+    else:
+        flash("Already subbed.", "danger")
     return redirect(request.referrer)
