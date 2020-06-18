@@ -14,6 +14,11 @@ def home():
     return render_template("main/index.html", title="Home")
 
 
+@main_blueprint.route("/marketing")
+def marketing():
+    return render_template("main/marketing.html", title="Marketing")
+
+
 @main_blueprint.route("/contact", methods=["GET", "POST"])
 def contact():
     form = ContactForm()
