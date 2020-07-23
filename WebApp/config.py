@@ -1,10 +1,18 @@
 import os
 import json
+from sys import platform
+from pathlib import Path
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 ROOT_PATH = os.path.abspath(os.path.join(DIR_PATH, os.pardir))
 
-with open("/etc/config.json") as config_file:
+
+if "linux" in platform or "darwin" in platform:
+    fname = "/etc/config.json"
+else:
+    home = str(Path.home()).replace("\\", "/")[2:]
+    fname = f"{home}/.config.json"
+with open(fname) as config_file:
     config = json.load(config_file)
 
 
