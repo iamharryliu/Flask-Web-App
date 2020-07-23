@@ -1,6 +1,9 @@
 # FlaskWebApp
 Flask base application for developing web apps.
 
+### Requirements
+Python3.6+
+
 ### Installing
 Create config file.
 ```
