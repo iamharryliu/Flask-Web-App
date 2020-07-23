@@ -16,11 +16,23 @@ sudo nano /etc/config.json
         "ADMINS":[admin usernames]
 }
 ```
+macOS / Linux
 ```
-git clone https://github.com/iamharryliu/Flask-Web-App.git
-cd Flask-Web-App
+git clone https://github.com/iamharryliu/FlaskWebApp.git
+cd FlaskWebApp
 python3 -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
+python setup_db.py
+python run.py
+```
+Windows
+
+```
+git clone https://github.com/iamharryliu/FlaskWebApp.git
+cd FlaskWebApp
+python -m venv venv
+source venv/Scripts/activate
 pip install -r requirements.txt
 python setup_db.py
 python run.py
