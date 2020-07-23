@@ -10,6 +10,7 @@ sudo nano /etc/config.json
 {
         "SECRET_KEY":"your secret key",
         "SQLALCHEMY_DATABASE_URI":"sqlite:///site.db",
+        "DEBUG": true,
         "EMAIL_USERNAME":"your email",
         "EMAIL_PASSWORD":"your password",
         "EMAIL_DEFAULT_SENDER":"your email",
